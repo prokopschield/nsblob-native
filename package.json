@@ -1,7 +1,7 @@
 {
 	"name": "nsblob",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"main": "lib/nsblob.js",
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
@@ -18,7 +18,6 @@
 	},
 	"homepage": "https://github.com/prokopschield/nsblob#readme",
 	"dependencies": {
-		"nodesite.eu": "^1.2.0-9",
-		"uncased": "^1.0.0-4"
+		"nodesite.eu": "^1.2.0-9"
 	}
 }

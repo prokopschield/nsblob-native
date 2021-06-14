@@ -3,7 +3,6 @@ import { getConfig } from 'doge-config';
 import fs from 'fs';
 import { direct, NodeSiteClient, rawwrite } from 'nodesite.eu';
 import path from 'path';
-import Uncased from 'uncased';
 
 const config = getConfig('nsblob', {
 	cache_size_limit: 1 << 28,
@@ -124,6 +123,23 @@ export class nsblob {
 				return resolve(ret);
 			});
 		});
+	}
+	public static async store_to_path (desc: string | DirMap, fspath: string): Promise<boolean> {
+		try {
+			if (typeof desc === 'string') {
+				const buf = await nsblob.fetch(desc);
+				await fs.promises.writeFile(fspath, buf);
+				return true;
+			}
+			if (!fs.existsSync(fspath)) fs.mkdirSync(fspath, { recursive: true });
+			await Promise.all(
+				Object.entries(desc)
+				.map(([ name, desc ]) => nsblob.store_to_path(desc, path.resolve(fspath, name)))
+			);
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 }
 

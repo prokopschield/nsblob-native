@@ -150,11 +150,6 @@ ts-hound@^1.0.7:
   resolved "https://registry.yarnpkg.com/ts-hound/-/ts-hound-1.0.7.tgz#0ce8f3f874c1cc7f6165953954f60cc04b0c5bc0"
   integrity sha512-36EK3QQfAMgf4lvWRgvyP4Vxthf+CybmaXqKSHhASjZbiEiKDDoNbm8jLnuzvoHRtWCaEZ5u0QqWcuFRowoffg==
 
-uncased@^1.0.0-4:
-  version "1.0.0-4"
-  resolved "https://registry.yarnpkg.com/uncased/-/uncased-1.0.0-4.tgz#feb6983d4934ae2b3465bd2ed18ee384102df3f1"
-  integrity sha512-Vet292NY1ITs09vK9apmfVTr093qySIUmMAfAmjC/HVtTeLYYEb3EVbDF3C3dy7EzT5nwmzI36crxIQyezZJFQ==
-
 ws@~7.4.2:
   version "7.4.6"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
