@@ -134,7 +134,11 @@ export class nsblob {
 			if (!fs.existsSync(fspath)) fs.mkdirSync(fspath, { recursive: true });
 			await Promise.all(
 				Object.entries(desc)
-				.map(([ name, desc ]) => nsblob.store_to_path(desc, path.resolve(fspath, name)))
+				.map(async([ name, desc ]) => {
+					let new_path = path.resolve(fspath, name);
+					if (!new_path.includes(fspath)) new_path = path.resolve(fspath, name.replace(/[^a-z0-9\-]+/gi, ' ').trim().replace(/[^a-z0-9\-]+/gi, '.'));
+					return nsblob.store_to_path(desc, new_path);
+				})
 			);
 			return true;
 		} catch (error) {
