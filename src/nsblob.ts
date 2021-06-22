@@ -54,6 +54,7 @@ export class nsblob {
 	}
 	public static hashmap = new Map<string, string>();
 	public static async store (data: Buffer | string, file?: string): Promise<string> {
+		await ready;
 		data ||= '';
 		if (data.length > file_size_limit) {
 			return nsblob.store('File was too large.');
@@ -77,10 +78,12 @@ export class nsblob {
 		});
 	}
 	public static async store_file (file: string, dir?: string): Promise<string> {
+		await ready;
 		const data = await fs.promises.readFile(file);
 		return await nsblob.store(data, dir && path.relative(dir, file));
 	}
 	public static async store_dir (dir: string): Promise<DirMap> {
+		await ready;
 		const read = await fs.promises.readdir(dir);
 		const hashed = await Promise.all(
 			read.map(async function fname (fname: string): Promise<[ string, string | DirMap ]> {
@@ -125,6 +128,7 @@ export class nsblob {
 		});
 	}
 	public static async store_to_path (desc: string | DirMap, fspath: string): Promise<boolean> {
+		await ready;
 		try {
 			if (typeof desc === 'string') {
 				const buf = await nsblob.fetch(desc);
