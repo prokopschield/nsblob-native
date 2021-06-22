@@ -1,7 +1,7 @@
 const { blake2sHex } = require('blakejs');
 import { getConfig } from 'doge-config';
 import fs from 'fs';
-import { direct, NodeSiteClient, rawwrite } from 'nodesite.eu';
+import { NodeSiteClient } from 'nodesite.eu';
 import path from 'path';
 
 const config = getConfig('nsblob', {
@@ -54,7 +54,6 @@ export class nsblob {
 	}
 	public static hashmap = new Map<string, string>();
 	public static async store (data: Buffer | string, file?: string): Promise<string> {
-		await ready;
 		data ||= '';
 		if (data.length > file_size_limit) {
 			return nsblob.store('File was too large.');
@@ -62,17 +61,20 @@ export class nsblob {
 		const blake = blake2sHex(data);
 		const prehash = nsblob.hashmap.get(blake);
 		if (prehash) return prehash;
+		const socket = await ready;
 		return new Promise (resolve => {
-			rawwrite('blake2hash', blake);
-			direct()?.once(blake, (hash?: string) => {
+			socket
+			.emit('blake2hash', blake)
+			.once(blake, (hash?: string) => {
 				if (hash) {
 					nsblob.hashmap.set(blake, hash);
 					return resolve(hash);
 				} else {
-					rawwrite('blob2hash', blake, data);
-					direct()
-					?.once(blake, (hash: string) => resolve(hash))
-					?.once(blake, (hash: string) => nsblob.hashmap.set(blake, hash))
+					const ref = `b_${blake}`;
+					socket
+					.emit('blob2hash', ref, data)
+					.once(ref, (hash: string) => resolve(hash))
+					.once(ref, (hash: string) => nsblob.hashmap.set(blake, hash))
 				}
 			});
 		});
