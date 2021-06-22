@@ -9,6 +9,7 @@ const config = getConfig('nsblob', {
 	file_size_limit: 1 << 24,
 	str_internal_error: 'INTERNAL_ERROR',
 	str_not_a_file: 'NOT_A_FILE',
+	file_too_large: 'File was too large.',
 });
 
 const { file_size_limit } = config.num;
@@ -56,7 +57,7 @@ export class nsblob {
 	public static async store (data: Buffer | string, file?: string): Promise<string> {
 		data ||= '';
 		if (data.length > file_size_limit) {
-			return nsblob.store('File was too large.');
+			return nsblob.store(config.str.file_too_large);
 		}
 		const blake = blake2sHex(data);
 		const prehash = nsblob.hashmap.get(blake);
@@ -81,6 +82,8 @@ export class nsblob {
 	}
 	public static async store_file (file: string, dir?: string): Promise<string> {
 		await ready;
+		const stat = await fs.promises.stat(file);
+		if (stat.size > file_size_limit) return await nsblob.store(config.str.file_too_large);
 		const data = await fs.promises.readFile(file);
 		return await nsblob.store(data, dir && path.relative(dir, file));
 	}
