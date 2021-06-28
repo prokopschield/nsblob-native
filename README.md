@@ -16,4 +16,3 @@ nsblob.store_dir(<path>): Promise<DirMap>;
 nsblob.fetch(<string>): Promise<Buffer>;
 nsblob.store_to_path(<string | DirMap>, <path>): Promise<void>;
 ```
-
