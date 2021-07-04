@@ -3,6 +3,7 @@ import { getConfig } from 'doge-config';
 import fs from 'fs';
 import { NodeSiteClient } from 'nodesite.eu';
 import path from 'path';
+import { read, write } from 'serial-async-io';
 
 const config = getConfig('nsblob', {
 	cache_size_limit: 1 << 28,
@@ -96,7 +97,7 @@ export class nsblob {
 		const stat = await fs.promises.stat(file);
 		if (stat.size > file_size_limit)
 			return await nsblob.store(config.str.file_too_large);
-		const data = await fs.promises.readFile(file);
+		const data = await read(file);
 		return await nsblob.store(data, dir && path.relative(dir, file));
 	}
 	public static async store_dir(dir: string): Promise<DirMap> {
@@ -154,7 +155,7 @@ export class nsblob {
 		try {
 			if (typeof desc === 'string') {
 				const buf = await nsblob.fetch(desc);
-				await fs.promises.writeFile(fspath, buf);
+				await write(fspath, buf);
 				return true;
 			}
 			if (!fs.existsSync(fspath)) fs.mkdirSync(fspath, { recursive: true });
