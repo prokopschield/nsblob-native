@@ -1,12 +1,12 @@
 {
 	"name": "nsblob",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.2.7",
+	"version": "0.2.8",
 	"main": "lib/nsblob.js",
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
 	"devDependencies": {
-		"@types/node": "^14"
+		"@types/node": ">=14"
 	},
 	"repository": {
 		"type": "git",
@@ -18,8 +18,9 @@
 	},
 	"homepage": "https://github.com/prokopschield/nsblob#readme",
 	"dependencies": {
-		"blakets": "^0.0.0-4",
-		"nodesite.eu": "^1.2.0-10",
-		"serial-async-io": "^0.1.0-3"
+		"blakets": "^0.1.1",
+		"doge-config": "^0.3.9",
+		"nodesite.eu-core": "^1.2.0",
+		"serial-async-io": "^0.1.0"
 	}
 }

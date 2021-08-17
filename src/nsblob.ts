@@ -1,7 +1,7 @@
 import { blake2sHex } from 'blakets';
 import { getConfig } from 'doge-config';
 import fs from 'fs';
-import { NodeSiteClient } from 'nodesite.eu';
+import connect from 'nodesite.eu-core';
 import path from 'path';
 import { read, write } from 'serial-async-io';
 
@@ -15,7 +15,7 @@ const config = getConfig('nsblob', {
 
 const { file_size_limit } = config.num;
 
-const ready = NodeSiteClient.ready;
+const socket = connect();
 
 export interface DirMap {
 	[filename: string]: string | DirMap;
@@ -76,7 +76,6 @@ export class nsblob {
 		const blake = blake2sHex(data);
 		const prehash = nsblob.hashmap.get(blake);
 		if (prehash) return prehash;
-		const socket = await ready;
 		return new Promise((resolve) => {
 			socket.emit('blake2hash', blake).once(blake, (hash?: string) => {
 				if (hash) {
@@ -93,7 +92,6 @@ export class nsblob {
 		});
 	}
 	public static async store_file(file: string, dir?: string): Promise<string> {
-		await ready;
 		const stat = await fs.promises.stat(file);
 		if (stat.size > file_size_limit)
 			return await nsblob.store(config.str.file_too_large);
@@ -101,7 +99,6 @@ export class nsblob {
 		return await nsblob.store(data, dir && path.relative(dir, file));
 	}
 	public static async store_dir(dir: string): Promise<DirMap> {
-		await ready;
 		const read = await fs.promises.readdir(dir);
 		const hashed = await Promise.all(
 			read.map(async function fname(
@@ -136,7 +133,6 @@ export class nsblob {
 			ret.set(from_cache);
 			return ret;
 		}
-		const socket = await ready;
 		return new Promise((resolve) => {
 			socket.emit('request_blob', desc);
 			socket.once(desc, (blob: Buffer) => {
@@ -151,7 +147,6 @@ export class nsblob {
 		desc: string | DirMap,
 		fspath: string
 	): Promise<boolean> {
-		await ready;
 		try {
 			if (typeof desc === 'string') {
 				const buf = await nsblob.fetch(desc);
