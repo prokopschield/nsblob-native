@@ -1,7 +1,7 @@
 {
 	"name": "nsblob",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"main": "lib/nsblob.js",
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
@@ -19,7 +19,7 @@
 	"homepage": "https://github.com/prokopschield/nsblob#readme",
 	"dependencies": {
 		"blakets": "^0.1.1",
-		"doge-config": "^0.3.9",
+		"doge-config": "^0.3.10",
 		"nodesite.eu-core": "^1.2.0",
 		"serial-async-io": "^0.1.0"
 	}

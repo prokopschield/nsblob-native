@@ -41,17 +41,22 @@ debug@~4.3.1:
   dependencies:
     ms "2.1.2"
 
-doge-config@^0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/doge-config/-/doge-config-0.3.9.tgz#99e387edb5e1d29f3d2b389286a3f419f2801bf4"
-  integrity sha512-iQrAC2QIxMIBOkuE5doaPSEp8ua4IzCuVqRKE9cSngCm5+PCr71AQdZrWE7GcjxPfteK2U6UzLMPD7pa1atf9A==
+doge-config@^0.3.10:
+  version "0.3.10"
+  resolved "https://registry.yarnpkg.com/doge-config/-/doge-config-0.3.10.tgz#878040e874903c8d191d17fd7f7f1f6584810c3a"
+  integrity sha512-7Cc7aIPY8MrZdRMCW1UBiGs0UbbDHfvqrMgirGILeIv2aa1SwK2W1/HGFHxJ4pUCBY/BqeU0BV+gdR1TaB/kYQ==
   dependencies:
-    doge-json "^1.1.1"
+    doge-json "^1.1.2"
 
 doge-json@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/doge-json/-/doge-json-1.1.1.tgz#0a10d7c378a4ffe24ff8adf036417a8e50e7d399"
   integrity sha512-rVqwd+zjDz0MaLjuVxU43jg7yQmUFOPpjnX70gyoed9kuZ3RbaPpkVW3d/ECTnE0Q4A4cSyjNfCCvRBotoNCdg==
+
+doge-json@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/doge-json/-/doge-json-1.1.2.tgz#2ce8001433ae70780e83b966154fa25d2c7775a5"
+  integrity sha512-0kDbITkoI1Aj+8GpYQouumaShq+Ernm72GfRfoO+7aqta1eB3hq5zkwx8u853E1hEtvoyHQGQJdDYf4hJGXn0Q==
 
 engine.io-client@~4.1.0:
   version "4.1.4"
