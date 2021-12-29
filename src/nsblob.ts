@@ -86,12 +86,17 @@ export class nsblob {
 					socket
 						.emit('blob2hash', ref, data)
 						.once(ref, (hash: string) => resolve(hash))
-						.once(ref, (hash: string) => nsblob.hashmap.set(blake, hash));
+						.once(ref, (hash: string) =>
+							nsblob.hashmap.set(blake, hash)
+						);
 				}
 			});
 		});
 	}
-	public static async store_file(file: string, dir?: string): Promise<string> {
+	public static async store_file(
+		file: string,
+		dir?: string
+	): Promise<string> {
 		const stat = await fs.promises.stat(file);
 		if (stat.size > file_size_limit)
 			return await nsblob.store(config.str.file_too_large);
@@ -112,10 +117,16 @@ export class nsblob {
 					} else if (stat.isFile()) {
 						return [fname, await nsblob.store_file(pname, dir)];
 					} else {
-						return [fname, await nsblob.store(config.str.str_not_a_file)];
+						return [
+							fname,
+							await nsblob.store(config.str.str_not_a_file),
+						];
 					}
 				} catch (error) {
-					return [fname, await nsblob.store(config.str.str_internal_error)];
+					return [
+						fname,
+						await nsblob.store(config.str.str_internal_error),
+					];
 				}
 			})
 		);
@@ -153,7 +164,9 @@ export class nsblob {
 				await write(fspath, buf);
 				return true;
 			}
-			if (!fs.existsSync(fspath)) fs.mkdirSync(fspath, { recursive: true });
+			if (!fs.existsSync(fspath)) {
+				fs.mkdirSync(fspath, { recursive: true });
+			}
 			await Promise.all(
 				Object.entries(desc).map(async ([name, desc]) => {
 					let new_path = path.resolve(fspath, name);
