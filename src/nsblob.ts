@@ -65,18 +65,32 @@ export class nsblob {
 		nsblob.gc(max_size);
 	}
 	public static hashmap = new Map<string, string>();
+
+	public static promise_map = new Map<string, Promise<string>>();
+
 	public static async store(
 		data: Buffer | string,
 		file?: string
 	): Promise<string> {
 		data ||= '';
+
 		if (data.length > file_size_limit) {
-			return nsblob.store(config.str.file_too_large);
+			throw new Error(
+				`${file} is too large! ${data.length} > ${file_size_limit}`
+			);
 		}
+
 		const blake = blake2sHex(data);
+
 		const prehash = nsblob.hashmap.get(blake);
 		if (prehash) return prehash;
-		return new Promise((resolve) => {
+
+		const prepromise = nsblob.promise_map.get(blake);
+		if (prepromise) {
+			return await prepromise;
+		}
+
+		const promise = new Promise<string>((resolve, reject) => {
 			socket.emit('blake2hash', blake).once(blake, (hash?: string) => {
 				if (hash) {
 					nsblob.hashmap.set(blake, hash);
@@ -85,13 +99,26 @@ export class nsblob {
 					const ref = `b_${blake}`;
 					socket
 						.emit('blob2hash', ref, data)
-						.once(ref, (hash: string) => resolve(hash))
-						.once(ref, (hash: string) =>
-							nsblob.hashmap.set(blake, hash)
-						);
+						.once(ref, (hash: string) => {
+							socket
+								.emit('hash2blake', hash)
+								.once(hash, (newblake: string) => {
+									if (blake === newblake) {
+										nsblob.hashmap.set(blake, hash);
+										return resolve(hash);
+									} else {
+										return reject(
+											`nsblob: checksum mismatch`
+										);
+									}
+								});
+						});
 				}
 			});
 		});
+
+		nsblob.promise_map.set(blake, promise);
+		return promise;
 	}
 	public static async store_file(
 		file: string,
@@ -185,6 +212,12 @@ export class nsblob {
 		} catch (error) {
 			return false;
 		}
+	}
+	public static get config() {
+		return config;
+	}
+	public static get socket() {
+		return socket;
 	}
 }
 
