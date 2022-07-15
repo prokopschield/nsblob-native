@@ -167,17 +167,13 @@ export class nsblob {
 	public static async fetch(desc: string): Promise<Buffer> {
 		const from_cache = nsblob.cache_get(desc);
 		if (from_cache) {
-			const ret = Buffer.allocUnsafe(from_cache.length);
-			ret.set(from_cache);
-			return ret;
+			return Buffer.from(from_cache);
 		}
 		return new Promise((resolve) => {
 			socket.emit('request_blob', desc);
 			socket.once(desc, (blob: Buffer) => {
-				nsblob.cache_put(desc, blob);
-				const ret = Buffer.allocUnsafe(blob.length);
-				ret.set(blob);
-				return resolve(ret);
+				nsblob.cache_put(desc, Buffer.from(blob));
+				return resolve(Buffer.from(blob));
 			});
 		});
 	}
