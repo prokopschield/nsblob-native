@@ -4,6 +4,7 @@ import fs from 'fs';
 import connect from 'nodesite.eu-core';
 import path from 'path';
 import { read, write } from 'serial-async-io';
+import type { Socket } from 'socket.io-client';
 
 const config = getConfig('nsblob', {
 	cache_size_limit: 1 << 28,
@@ -212,7 +213,7 @@ export class nsblob {
 	public static get config() {
 		return config;
 	}
-	public static get socket() {
+	public static get socket(): Socket {
 		return socket;
 	}
 }
