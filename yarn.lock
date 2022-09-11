@@ -18,9 +18,9 @@
   integrity sha512-SRXjM+tfsSlA9VuG8hGO2nft2p8zjXCK1VcC6N4NXbBbYbSia9kzCChYQajIjzIqOOOuh5Ock6MmV2oux4jDZQ==
 
 "@types/node@>=14":
-  version "18.7.15"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.15.tgz#20ae1ec80c57ee844b469f968a1cd511d4088b29"
-  integrity sha512-XnjpaI8Bgc3eBag2Aw4t2Uj/49lLBSStHWfqKvIuXD7FIrZyMLWp8KuAFHAqxMZYTF9l08N1ctUn9YNybZJVmQ==
+  version "18.7.16"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.7.16.tgz#0eb3cce1e37c79619943d2fd903919fc30850601"
+  integrity sha512-EQHhixfu+mkqHMZl1R2Ovuvn47PUw18azMJOTwSZr9/fhzHNGXAJ0ma0dayRVchprpCj0Kc1K1xKoWaATWF1qg==
 
 backo2@~1.0.2:
   version "1.0.2"
@@ -51,10 +51,10 @@ debug@~4.3.1:
   dependencies:
     ms "2.1.2"
 
-doge-config@^0.3.19:
-  version "0.3.19"
-  resolved "https://registry.yarnpkg.com/doge-config/-/doge-config-0.3.19.tgz#4d329681adc69f8165798106f21343f7f0fe92a6"
-  integrity sha512-QfLDbG4ul3rgiF1Utrxr6KHeXfEf+Jck+sODEobrK7Zi7kD6ulFSGOHy7/3gUjSl64f67cK0d07zsCyAqoeWDQ==
+doge-config@^0.3.20:
+  version "0.3.20"
+  resolved "https://registry.yarnpkg.com/doge-config/-/doge-config-0.3.20.tgz#430770a454c81740ebaa2d226be480d87246e240"
+  integrity sha512-2JrUCL8HTGS7KYpYkPx6kvrhAhrC/+OQCss5kPMi17hCVfb4OnSLEdyIwaEAbRUoIZ0d4lIfFUYuk2PLoRaSuw==
   dependencies:
     doge-json "^1.2.8"
 
