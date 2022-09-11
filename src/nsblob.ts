@@ -127,7 +127,7 @@ export class nsblob {
 	): Promise<string> {
 		const stat = await fs.promises.stat(file);
 		if (stat.size > file_size_limit)
-			return await nsblob.store(config.str.file_too_large);
+			throw new Error(config.str.file_too_large);
 		const data = await read(file);
 		return await nsblob.store(data, dir && path.relative(dir, file));
 	}
