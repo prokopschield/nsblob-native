@@ -1,4 +1,4 @@
-import { blake2sHex } from 'blakets';
+import { blake2sHex } from './blake';
 import { getConfig } from 'doge-config';
 import fs from 'fs';
 import connect from 'nodesite.eu-core';
