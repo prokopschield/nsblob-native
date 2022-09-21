@@ -6,6 +6,8 @@ import path from 'path';
 import { read, write } from 'serial-async-io';
 import type { Socket } from 'socket.io-client';
 
+import { HashMap } from './hashmap';
+
 const config = getConfig('nsblob', {
 	cache_size_limit: 1 << 28,
 	file_size_limit: 1 << 24,
@@ -65,7 +67,7 @@ export class nsblob {
 	public static set cache_size(max_size: number) {
 		nsblob.gc(max_size);
 	}
-	public static hashmap = new Map<string, string>();
+	public static hashmap = new HashMap();
 
 	public static promise_map = new Map<string, Promise<string>>();
 
@@ -83,7 +85,7 @@ export class nsblob {
 
 		const blake = blake2sHex(data);
 
-		const prehash = nsblob.hashmap.get(blake);
+		const prehash = nsblob.hashmap.getB2H(blake);
 		if (prehash) return prehash;
 
 		const prepromise = nsblob.promise_map.get(blake);
@@ -94,7 +96,7 @@ export class nsblob {
 		const promise = new Promise<string>((resolve, reject) => {
 			socket.emit('blake2hash', blake).once(blake, (hash?: string) => {
 				if (hash) {
-					nsblob.hashmap.set(blake, hash);
+					nsblob.hashmap.setB2H(blake, hash);
 					return resolve(hash);
 				} else {
 					const ref = `b_${blake}`;
@@ -105,7 +107,7 @@ export class nsblob {
 								.emit('hash2blake', hash)
 								.once(hash, (newblake: string) => {
 									if (blake === newblake) {
-										nsblob.hashmap.set(blake, hash);
+										nsblob.hashmap.setB2H(blake, hash);
 										return resolve(hash);
 									} else {
 										return reject(
