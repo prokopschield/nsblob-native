@@ -1,5 +1,5 @@
 {
-	"name": "nsblob",
+	"name": "nsblob-native",
 	"description": "Store blobs on nodesite.eu",
 	"version": "0.2.18-1",
 	"main": "lib/nsblob.js",
