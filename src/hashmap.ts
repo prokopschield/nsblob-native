@@ -1,4 +1,5 @@
 import { Semaphore } from '@prokopschield/semaphore';
+import fs from 'fs';
 import { DB } from 'insta-db';
 import os from 'os';
 import path from 'path';
@@ -7,16 +8,19 @@ export class HashMap extends DB {
 	semaphore = new Semaphore('nsblob-native-hashmap');
 
 	constructor() {
+		const directory = path.resolve(os.homedir(), '.cache', 'nsblob-native');
+
+		if (!fs.existsSync(directory)) {
+			fs.mkdirSync(directory);
+		}
+
+		const storage_file = path.resolve(directory, 'hashmap');
+
 		super({
 			read_only_files: [],
 			size: 1024 * 1024 * 1024,
 			storage_copies: [],
-			storage_file: path.resolve(
-				os.homedir(),
-				'.cache',
-				'nsblob-native',
-				'hashmap'
-			),
+			storage_file,
 		});
 	}
 
