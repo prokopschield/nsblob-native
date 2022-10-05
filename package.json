@@ -1,12 +1,12 @@
 {
 	"name": "nsblob-native",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.2.18-1",
+	"version": "0.2.18-2",
 	"main": "lib/nsblob.js",
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
 	"dependencies": {
-		"@prokopschield/semaphore": "^0.1.0-3",
+		"@prokopschield/semaphore": "^0.1.0-4",
 		"blake2": "^4.1.1",
 		"doge-config": "^0.3.20",
 		"insta-db": "^0.1.0-7",
