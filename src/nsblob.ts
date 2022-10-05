@@ -1,5 +1,6 @@
 import { blake2sHex } from './blake';
 import { getConfig } from 'doge-config';
+import Json from 'doge-json';
 import fs from 'fs';
 import connect from 'nodesite.eu-core';
 import path from 'path';
@@ -123,6 +124,9 @@ export class nsblob {
 		nsblob.promise_map.set(blake, promise);
 		return promise;
 	}
+	public static store_json<T>(object: T): Promise<string> {
+		return nsblob.store(Json.encode(object));
+	}
 	public static async store_file(
 		file: string,
 		dir?: string
@@ -179,6 +183,11 @@ export class nsblob {
 				return resolve(Buffer.from(blob));
 			});
 		});
+	}
+	public static async fetch_json<
+		T extends null | boolean | number | string | T[] | Record<string, T>
+	>(hash: string): Promise<T> {
+		return Json.decode(String(await nsblob.fetch(hash)));
 	}
 	public static async store_to_path(
 		desc: string | DirMap,
