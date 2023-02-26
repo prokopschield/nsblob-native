@@ -1,11 +1,11 @@
 import { Semaphore } from '@prokopschield/semaphore';
 import fs from 'fs';
-import { DB } from 'insta-db';
+import DataMap from 'nscdn-hashmap';
 import os from 'os';
 import path from 'path';
 
-export class HashMap extends DB {
-	semaphore = new Semaphore('nsblob-native-hashmap');
+export class HashMap extends DataMap<string, string> {
+	semaphore = new Semaphore(`nsblob-native-hashmap-${process.getuid?.()}`);
 
 	constructor() {
 		const directory = path.resolve(os.homedir(), '.cache', 'nsblob-native');
@@ -14,14 +14,9 @@ export class HashMap extends DB {
 			fs.mkdirSync(directory);
 		}
 
-		const storage_file = path.resolve(directory, 'hashmap');
+		const storage_file = path.resolve(directory, 'hashmap-0.2.2');
 
-		super({
-			read_only_files: [],
-			size: 1024 * 1024 * 1024,
-			storage_copies: [],
-			storage_file,
-		});
+		super(storage_file, 1024 * 1024 * 1024);
 	}
 
 	setB2H(blake: string, hash: string) {
@@ -29,10 +24,7 @@ export class HashMap extends DB {
 			return undefined;
 		}
 
-		const returnValue = this.set(
-			Buffer.from(blake, 'hex'),
-			Buffer.from(hash, 'hex')
-		);
+		const returnValue = this.set(blake, hash);
 
 		this.semaphore.post();
 
@@ -44,10 +36,10 @@ export class HashMap extends DB {
 			return undefined;
 		}
 
-		const returnValue = this.get(Buffer.from(blake, 'hex')) || '';
+		const returnValue = this.hashmap.get(blake);
 
 		this.semaphore.post();
 
-		return returnValue.toString('hex') || undefined;
+		return returnValue || undefined;
 	}
 }
