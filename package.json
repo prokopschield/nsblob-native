@@ -6,7 +6,7 @@
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
 	"dependencies": {
-		"@prokopschield/semaphore": "^0.1.0-4",
+		"@prokopschield/semaphore": "^0.1.0-5",
 		"blake2": "^4.1.1",
 		"doge-config": "^0.3.20",
 		"nodesite.eu-core": "^1.3.2",
