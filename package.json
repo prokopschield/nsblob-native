@@ -1,7 +1,7 @@
 {
 	"name": "nsblob-native",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.2.20-1",
+	"version": "0.2.20-2",
 	"main": "lib/nsblob.js",
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
