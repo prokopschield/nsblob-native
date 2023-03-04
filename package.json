@@ -1,7 +1,7 @@
 {
 	"name": "nsblob",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.2.20",
+	"version": "0.2.21",
 	"main": "lib/nsblob.js",
 	"bin": {
 		"nsblob": "lib/cli.js"
