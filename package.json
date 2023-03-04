@@ -3,6 +3,9 @@
 	"description": "Store blobs on nodesite.eu",
 	"version": "0.2.20",
 	"main": "lib/nsblob.js",
+	"bin": {
+		"nsblob": "lib/cli.js"
+	},
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
 	"devDependencies": {
