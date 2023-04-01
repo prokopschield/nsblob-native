@@ -1,7 +1,7 @@
 {
 	"name": "nsblob-native",
 	"description": "Store blobs on nodesite.eu",
-	"version": "0.2.20-2",
+	"version": "0.2.22",
 	"main": "lib/nsblob.js",
 	"author": "Prokop Schield",
 	"license": "GPL-3.0-or-later",
@@ -9,7 +9,8 @@
 		"@prokopschield/semaphore": "^0.1.0-5",
 		"blake2": "^4.1.1",
 		"doge-config": "^0.3.20",
-		"nodesite.eu-core": "^1.3.2",
+		"doge-json": "^1.2.11",
+		"nodesite.eu-core": "^1.3.3",
 		"nscdn-hashmap": "^0.1.0-3",
 		"serial-async-io": "^0.3.2",
 		"socket.io-client": "^4.6.1"
