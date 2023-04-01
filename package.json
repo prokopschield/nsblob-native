@@ -23,9 +23,9 @@
 	"dependencies": {
 		"blakets": "^0.1.12",
 		"doge-config": "^0.3.20",
-		"doge-json": "^1.2.10",
-		"nodesite.eu-core": "^1.3.2",
+		"doge-json": "^1.2.11",
+		"nodesite.eu-core": "^1.3.3",
 		"serial-async-io": "^0.3.2",
-		"socket.io-client": "^4.5.4"
+		"socket.io-client": "^4.6.1"
 	}
 }
