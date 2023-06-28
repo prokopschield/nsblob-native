@@ -71,10 +71,10 @@ export class nsblob {
 	public static promise_map = new Map<string, Promise<string>>();
 
 	public static async store(
-		data: Buffer | string,
+		input: Buffer | string,
 		file?: string
 	): Promise<string> {
-		data ||= '';
+		const data = Buffer.from(input || '');
 
 		if (data.length > file_size_limit) {
 			throw new Error(
@@ -107,6 +107,7 @@ export class nsblob {
 								.once(hash, (newblake: string) => {
 									if (blake === newblake) {
 										nsblob.hashmap.set(blake, hash);
+										this.cache_put(hash, data, true);
 										return resolve(hash);
 									} else {
 										return reject(
