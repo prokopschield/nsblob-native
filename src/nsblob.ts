@@ -53,7 +53,7 @@ export class nsblob {
 	public static cache_put(
 		hash: string,
 		obj: Buffer,
-		low_priority: boolean = false
+		low_priority: boolean = false,
 	) {
 		cache_size.set(nsblob.cache, nsblob.cache_size + obj.length);
 		nsblob.cache.set(hash, obj);
@@ -73,14 +73,14 @@ export class nsblob {
 	public static promise_map = new Map<string, Promise<string>>();
 
 	public static async store(
-		data: Buffer | string,
-		file?: string
+		input: Buffer | string,
+		file?: string,
 	): Promise<string> {
-		data ||= '';
+		const data = Buffer.from(input || '');
 
 		if (data.length > file_size_limit) {
 			throw new Error(
-				`${file} is too large! ${data.length} > ${file_size_limit}`
+				`${file} is too large! ${data.length} > ${file_size_limit}`,
 			);
 		}
 
@@ -101,22 +101,17 @@ export class nsblob {
 					return resolve(hash);
 				} else {
 					const ref = `b_${blake}`;
-					socket
-						.emit('blob2hash', ref, data)
-						.once(ref, (hash: string) => {
-							socket
-								.emit('hash2blake', hash)
-								.once(hash, (newblake: string) => {
-									if (blake === newblake) {
-										nsblob.hashmap.setB2H(blake, hash);
-										return resolve(hash);
-									} else {
-										return reject(
-											`nsblob: checksum mismatch`
-										);
-									}
-								});
+					socket.emit('blob2hash', ref, data).once(ref, (hash: string) => {
+						socket.emit('hash2blake', hash).once(hash, (newblake: string) => {
+							if (blake === newblake) {
+								nsblob.hashmap.setB2H(blake, hash);
+								this.cache_put(hash, data, true);
+								return resolve(hash);
+							} else {
+								return reject(`nsblob: checksum mismatch`);
+							}
 						});
+					});
 				}
 			});
 		});
@@ -127,13 +122,9 @@ export class nsblob {
 	public static store_json<T>(object: T): Promise<string> {
 		return nsblob.store(Json.encode(object));
 	}
-	public static async store_file(
-		file: string,
-		dir?: string
-	): Promise<string> {
+	public static async store_file(file: string, dir?: string): Promise<string> {
 		const stat = await fs.promises.stat(file);
-		if (stat.size > file_size_limit)
-			throw new Error(config.str.file_too_large);
+		if (stat.size > file_size_limit) throw new Error(config.str.file_too_large);
 		const data = await read(file);
 		return await nsblob.store(data, dir && path.relative(dir, file));
 	}
@@ -141,7 +132,7 @@ export class nsblob {
 		const read = await fs.promises.readdir(dir);
 		const hashed = await Promise.all(
 			read.map(async function fname(
-				fname: string
+				fname: string,
 			): Promise<[string, string | DirMap]> {
 				try {
 					const pname = path.resolve(dir, fname);
@@ -151,18 +142,12 @@ export class nsblob {
 					} else if (stat.isFile()) {
 						return [fname, await nsblob.store_file(pname, dir)];
 					} else {
-						return [
-							fname,
-							await nsblob.store(config.str.str_not_a_file),
-						];
+						return [fname, await nsblob.store(config.str.str_not_a_file)];
 					}
 				} catch (error) {
-					return [
-						fname,
-						await nsblob.store(config.str.str_internal_error),
-					];
+					return [fname, await nsblob.store(config.str.str_internal_error)];
 				}
-			})
+			}),
 		);
 		hashed.sort(([a], [b]) => (a < b ? -1 : 1));
 		const ret: DirMap = {};
@@ -185,13 +170,13 @@ export class nsblob {
 		});
 	}
 	public static async fetch_json<
-		T extends null | boolean | number | string | T[] | Record<string, T>
+		T extends null | boolean | number | string | T[] | Record<string, T>,
 	>(hash: string): Promise<T> {
 		return Json.decode(String(await nsblob.fetch(hash)));
 	}
 	public static async store_to_path(
 		desc: string | DirMap,
-		fspath: string
+		fspath: string,
 	): Promise<boolean> {
 		try {
 			if (typeof desc === 'string') {
@@ -211,10 +196,10 @@ export class nsblob {
 							name
 								.replace(/[^a-z0-9\-]+/gi, ' ')
 								.trim()
-								.replace(/[^a-z0-9\-]+/gi, '.')
+								.replace(/[^a-z0-9\-]+/gi, '.'),
 						);
 					return nsblob.store_to_path(desc, new_path);
-				})
+				}),
 			);
 			return true;
 		} catch (error) {
